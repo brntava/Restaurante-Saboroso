@@ -18,7 +18,7 @@ app.set('view engine', 'ejs');
 app.use(session({
   store: new RedisStore({
     host:'localhost',
-    port:6379
+    port:'6379'
   }),
   secret:'password',
   resave: true,
