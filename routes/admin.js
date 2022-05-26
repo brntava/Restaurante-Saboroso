@@ -1,12 +1,13 @@
 var express = require('express');
 var users = require('./../inc/users')
 var router = express.Router();
+var admin = require('./../inc/admin')
 
 // Middleware
 
 router.use(function(req, res, next){
 
-    if(['/login'].indexOf(req.url) === -1 && !req.session){
+    if(['/login'].indexOf(req.url) === -1 && !req.session.user){
         res.redirect('/admin/login')
     } else{
         next();
@@ -22,15 +23,19 @@ router.get('/logout', function(req, res, next){
 
 });
 
-router.get('/', function(req, res, next) {
+router.use(function(req, res, next){
 
-    res.render('admin/index')
+    req.menus = admin.getMenus(req);
+
+    next();
 
 });
 
-router.get('/login', function(req, res, next) {
+router.get('/', function(req, res, next) {
 
-    users.render(req, res, null)
+    res.render('admin/index', {
+        menus: req.menus
+    })
 
 });
 
@@ -44,10 +49,10 @@ router.post('/login', function(req, res, next){
 
         users.login(req.body.email, req.body.password).then(user => {
 
-            req.body = {};
             req.session.user = user;
+            req.body = {};
 
-            console.log('user', user)
+            console.log('user', req.session.user)
 
             res.redirect('/admin');
 
@@ -58,38 +63,54 @@ router.post('/login', function(req, res, next){
         });
 
     }
+    
+
+});
+
+router.get('/login', function(req, res, next) {
+
+    users.render(req, res, null)
 
 });
 
 router.get('/contacts', function(req, res, next) {
 
-    res.render('./../views/admin/contacts')
+    res.render('admin/contacts',{
+        menus: req.menus
+    })
 
 });
 
 router.get('/emails', function(req, res, next) {
 
-    res.render('admin/emails')
+    res.render('admin/emails',{
+        menus: req.menus
+    })
 
 });
 
 router.get('/menus', function(req, res, next) {
 
-    res.render('admin/menus')
+    res.render('admin/menus',{
+        menus: req.menus
+    })
 
 });
 
 router.get('/reservations', function(req, res, next) {
 
     res.render('admin/reservations',{
-        date: {}
+        date: {},
+        menus: req.menus
     })
 
 });
 
 router.get('/users', function(req, res, next) {
 
-    res.render('admin/users')
+    res.render('admin/users',{
+        menus: req.menus
+    })
 
 });
 

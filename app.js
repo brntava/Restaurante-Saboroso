@@ -16,13 +16,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(session({
-  store: new RedisStore({
-    host:'localhost',
-    port:'6379'
+    store: new RedisStore({
+      host:'127.0.0.1',
+      port:'6379'
   }),
   secret:'password',
   resave: true,
-  saveUninitialized:true
+  saveUninitialized:true,
 }));
 
 app.use(logger('dev'));
