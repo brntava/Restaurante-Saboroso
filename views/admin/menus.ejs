@@ -170,7 +170,7 @@
 
   formUpdate.save().then(json =>{
 
-    window.location.reload();
+    // window.location.reload();
 
   }).catch(err => {
 
@@ -178,6 +178,34 @@
 
   });
 
+  // 
+
+  [...document.querySelectorAll('.btn-delete')].forEach(btn => {
+
+    btn.addEventListener('click', e => {
+
+      let tr = e.srcElement.parentElement.parentElement;
+
+      let data = JSON.parse(tr.dataset.row);
+
+      if(confirm(`Deseja realmente excluir o prato ${data.title}?`)){
+
+        fetch(`/admin/menus/${data.id}`,{
+          method: 'DELETE'
+        })
+          .then(response => response.json())
+          .then(json => {
+
+            window.location.reload();
+
+          }); 
+
+        };
+
+    });
+  });
+
+  // 
 
   [...document.querySelectorAll('.btn-update')].forEach(btn => {
 
