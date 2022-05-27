@@ -18,9 +18,9 @@ HTMLFormElement.prototype.save = function(config){
 
             if(json.error){
                 if(typeof config.failure === 'function') config.failure(json.error);
-            } 
-
-            if(typeof config.success === 'function') config.success(json);
+            } else{
+                if(typeof config.success === 'function') config.success(json);
+            }
 
         }).catch(err => {
 
